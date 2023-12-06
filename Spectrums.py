@@ -23,37 +23,45 @@ numax=7000;
 molecule_id=1;
 #molecule='H2O';
 isotopo_id=1;
-
+method_="HT";
 
 
 
 # This is the function to get absorption coefficient, and absorpton, transmittance, and radiance spectrum
 def spectrum(P,T,length,numin,numax,molecule_id,isotopo_id,method_):
 
-    molecule=moleculeName(molecule_id);
-    if isotopo_id is None:
-        isotopo_id = 1
+    molecule=moleculeName(molecule_id); #Getting the name of the molecule from the id
+    #if isotopo_id is None:
+    #    isotopo_id = 1
 
-    name_isoto=isotopologueName(molecule_id,isotopo_id);
+    name_isoto=isotopologueName(molecule_id,isotopo_id); #Getting the name of the isotopologue from the id
 
     fetch(molecule,1,1,numin,numax)
-    # Lets go with absorption coefficient
-    nu,coef=absorptionCoefficient_HT(SourceTables=molecule,Diluent={'air':1.0},Environment={'T':T,'p':P,'l':length})
-    nu,coef=absorptionCoefficient_Gauss(SourceTables=molecule,Diluent={'air':1.0},Environment={'T':T,'p':P,'l':length})
+    # Lets go with the data
+    if method_=="HT":
+        nu,coef=absorptionCoefficient_HT(SourceTables=molecule,Diluent={'air':1.0},Environment={'T':T,'p':P,'l':length})
+    elif method_=="V":
+        nu,coef=absorptionCoefficient_Voigt(SourceTables=molecule,Diluent={'air':1.0},Environment={'T':T,'p':P,'l':length})
+    elif method_=="L":
+        nu,coef=absorptionCoefficient_Lorentz(SourceTables=molecule,Diluent={'air':1.0},Environment={'T':T,'p':P,'l':length})
+    elif method_=="D":
+        nu,coef=absorptionCoefficient_Doppler(SourceTables=molecule,Diluent={'air':1.0},Environment={'T':T,'p':P,'l':length})
+
+#nu,coef=absorptionCoefficient_Gauss(SourceTables=molecule,Diluent={'air':1.0},Environment={'T':T,'p':P,'l':length})
 #-> absorptionCoefficient_HT
 #-> absorptionCoefficient_Voigt
 #-> absorptionCoefficient_Lorentz
 #-> absorptionCoefficient_Doppler
 
-
+    #Getting the spectrums
     # Lets go with absorption Spectrum
     nu,absorp=absorptionSpectrum(nu,coef);
-
     # Lets go with transmittance Spectrum
     nu,trans=transmittanceSpectrum(nu,coef);
-
     # Lets go with radiance Spectrum
     nu,radi = radianceSpectrum(nu,coef);
+
+
 
     # Lets define a class to save the data
     class Data_spectrum:

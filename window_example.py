@@ -15,7 +15,7 @@ from Spectrums import spectrum
 
 # Function to update the plot
 def update_plot():
-    global method
+
     try:
         T_ = float(T.get())
         P_ = float(P.get())
@@ -24,8 +24,12 @@ def update_plot():
         isotopo_id_ = int(isotopo_id.get())
         numin_ = float(numin.get())
         numax_ = float(numax.get())
-        #method_=str(method.get())
-        method_="HT"
+        method_=str(method_var.get())
+
+        if method_ not in ["HT", "V", "L", "D"]:
+            messagebox.showerror("Error", "Invalid method. Please select a valid method.")
+            return
+        #method_="HT"
         #save = float(save.get())  # Retrieve the save value as a string
 
         # Calling HITRAN functions and generating data
@@ -109,18 +113,43 @@ def update_plot():
         messagebox.showerror("Error", "Invalid input. Please enter numeric values.")
 
     
+def Save_data():
+    try:
+        T_ = float(T.get())
+        P_ = float(P.get())
+        length_ = float(length.get())
+        molecule_id_ = int(molecule_id.get())
+        isotopo_id_ = int(isotopo_id.get())
+        numin_ = float(numin.get())
+        numax_ = float(numax.get())
+        #method_=str(method.get())
+        method_="HT"
+        Data = spectrum(P_, T_, length_, numin_, numax_, molecule_id_, isotopo_id_,method_)
+        
+        # Getting the data from the function result
+        nu = Data.nu
+        coef = Data.coef
+        absorp = Data.absorp
+        
+        # Save nu and coef to a new variable
+        saved_data = {'nu': nu, 'coef': coef} # This is a dictionary for saving the data
+        
+        # Export the saved data to a text file
+        with open('saved_data.txt', 'w') as file: # The statement with is for open a resource and close it automatically when is finished
+            # Writing a header
+            file.write('nu, Abs_coef\n')
+            for i in range(len(nu)):
+                file.write(f'{nu[i]}, {coef[i]}\n')
+        
+        return 0
 
-
-# Create the main application window
-root = tk.Tk()
-root.title("Spectrum analyzer")
-# Create a dark mode color scheme
-dark_background = "#282c36"
-dark_foreground = "#ffffff"
+    except Exception as e:
+        print(f"An error occurred saving the data")
 
 
 # Create input fields
 # Create a frame for the introductory paragraph
+root = tk.Tk()
 intro_frame = ttk.Frame(root)
 intro_frame.grid(row=0, column=0, columnspan=2, sticky="nsew")
 
@@ -175,18 +204,16 @@ method_dropdown = ttk.Combobox(input_frame, textvariable=method_var, values=["HT
 method_dropdown.grid(row=7, column=1)
 method_dropdown.set("HT")  # Set a default value
 
-
-'''
-save_label = ttk.Label(input_frame, text="Save the data as a text file (1) or not (0):")
-save_label.grid(row=7, column=0)
-save = ttk.Entry(input_frame)
-save.grid(row=7, column=1)
-'''
 # Next frame
 
 # Create a button to trigger the function and update the plot
 compute_button = ttk.Button(input_frame, text="Compute and Plot", command=update_plot)
 compute_button.grid(row=8, column=0, columnspan=2)
+
+# Create a button to to save the data
+saveD_button = ttk.Button(input_frame, text="Save the data in a text file", command=Save_data)
+saveD_button.grid(row=9, column=0, columnspan=2)
+
 
 #Create 
 
@@ -197,17 +224,17 @@ fig.subplots_adjust(hspace=0.5, wspace=0.5)  # Adjust vertical and horizontal sp
 # Create a Matplotlib canvas for embedding the figure in the Tkinter window
 canvas = FigureCanvasTkAgg(fig, master=root)
 canvas_widget = canvas.get_tk_widget()
-canvas_widget.grid(row=9, column=0, columnspan=2, sticky=tk.NSEW)
+canvas_widget.grid(row=10, column=0, columnspan=2, sticky=tk.NSEW)
 
 # Create a frame for the Matplotlib toolbar
 toolbar_frame = ttk.Frame(root)
-toolbar_frame.grid(row=10, column=0, columnspan=2, sticky="nsew")
+toolbar_frame.grid(row=11, column=0, columnspan=2, sticky="nsew")
 
 # Add a Matplotlib toolbar for zooming
 toolbar = NavigationToolbar2Tk(canvas, toolbar_frame)
 toolbar.update()
 toolbar.pack(side=tk.BOTTOM, fill=tk.X)
-canvas_widget.grid(row=11, column=0, columnspan=2, sticky=tk.NSEW)
+canvas_widget.grid(row=12, column=0, columnspan=2, sticky=tk.NSEW)
 
 # Configure grid row and column of plots weights to make them expand with the window
 root.grid_rowconfigure(9, weight=1)
