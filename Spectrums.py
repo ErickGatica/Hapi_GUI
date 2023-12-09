@@ -14,19 +14,6 @@ import matplotlib.pyplot as plt
 
 #Getting data for H2O in the range of cm^-1
 
-#Pressure and temperature for coeffcient in atm and K
-P=1;
-T=350;
-length=10; #length path in cm
-numin=2000;
-numax=7000;
-molecule_id=1;
-#molecule='H2O';
-isotopo_id=1;
-method_="HT";
-
-
-
 # This is the function to get absorption coefficient, and absorpton, transmittance, and radiance spectrum
 def spectrum(P,T,length,numin,numax,molecule_id,isotopo_id,method_):
 
@@ -36,7 +23,7 @@ def spectrum(P,T,length,numin,numax,molecule_id,isotopo_id,method_):
 
     name_isoto=isotopologueName(molecule_id,isotopo_id); #Getting the name of the isotopologue from the id
 
-    fetch(molecule,1,1,numin,numax)
+    fetch(molecule,molecule_id,isotopo_id,numin,numax)
     # Lets go with the data
     if method_=="HT":
         nu,coef=absorptionCoefficient_HT(SourceTables=molecule,Diluent={'air':1.0},Environment={'T':T,'p':P,'l':length})

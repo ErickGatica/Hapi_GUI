@@ -9,13 +9,14 @@ import numpy as np
 
 # Function to compute the result (replace with your own function)
 from Spectrums import spectrum
+from PIL import Image, ImageTk
 
 #method = tk.StringVar()
 #method.set("HT")  # Set a default value
 
 # Function to update the plot
 def update_plot():
-
+    #global axis
     try:
         T_ = float(T.get())
         P_ = float(P.get())
@@ -26,11 +27,10 @@ def update_plot():
         numax_ = float(numax.get())
         method_=str(method_var.get())
 
+
         if method_ not in ["HT", "V", "L", "D"]:
             messagebox.showerror("Error", "Invalid method. Please select a valid method.")
-            return
-        #method_="HT"
-        #save = float(save.get())  # Retrieve the save value as a string
+            return 0
 
         # Calling HITRAN functions and generating data
         Data = spectrum(P_, T_, length_, numin_, numax_, molecule_id_, isotopo_id_,method_)
@@ -42,72 +42,50 @@ def update_plot():
         trans = Data.trans
         radi = Data.radi
         name_isoto = Data.name_isoto  # Corrected the variable name here
-        '''
-        if int(save)==1:
-            # Function to download data as a text file
-                data_dict = {
-                "Wavenumber (nu)": nu,
-                "Coefficient": coef,
-                "Absorbance": absorp,
-                "Transmittance":trans,
-                "Radiance": radi,
-            }
 
-                with open("spectra_data.txt", "w") as file:
-                    for key, data in data_dict.items():
-                        file.write(f"{key}:\n")
-                        for value in data:
-                            file.write(f"{value:.4f}\n")
-                            file.write("\n")
-        '''
-
-
-        # Clear previous plots
-        ax1.clear()
-        ax2.clear()
-        ax3.clear()
-        ax4.clear()
+        # Clear previous plots, now i defined a button to do it
 
         # Plotting
-        ax1.plot(nu, coef)
+        ax1.plot(nu, coef, label=name_isoto + ' $T$=' + str(T_) + 'K $P$=' + str(P_) + 'atm')
         # Add a legend
-        ax1.legend(loc='upper right')
+        ax1.legend(loc='upper right', bbox_to_anchor=(1.0, 1.0))
         # Label the axes
         ax1.set_xlabel(r'$\nu$ $cm^{-1}$')
         ax1.set_ylabel(r'Coefficient $cm^2/molecule$')
         # Title
-        ax1.set_title('Absorption coefficient for ' + name_isoto + '$T$=' + str(T_) + 'K $P$=' + str(P_) + 'atm')
+        ax1.set_title('Absorption coefficient')
 
-        ax2.plot(nu, absorp)
+        ax2.plot(nu, absorp, label=name_isoto + ' $T$=' + str(T_) + 'K $P$=' + str(P_) + 'atm')
         # Add a legend
         ax2.legend(loc='upper right')
         # Label the axes
         ax2.set_xlabel(r'$\nu$ $cm^{-1}$')
         ax2.set_ylabel(r'Absorbance')
         # Title
-        ax2.set_title('Absorption spectrum for ' + name_isoto + '$T$=' + str(T_) + 'K $P$=' + str(P_) + 'atm')
+        ax2.set_title('Absorption spectrum')
 
-        ax3.plot(nu, trans)
+        ax3.plot(nu, trans, label=name_isoto + ' $T$=' + str(T_) + 'K $P$=' + str(P_) + 'atm')
         # Add a legend
         ax3.legend(loc='upper right')
         # Label the axes
         ax3.set_xlabel(r'$\nu$ $cm^{-1}$')
         ax3.set_ylabel(r'Transmittance')
         # Title
-        ax3.set_title('Transmittance spectrum for ' + name_isoto + '$T$=' + str(T_) + 'K $P$=' + str(P_) + 'atm')
+        ax3.set_title('Transmittance spectrum' )
 
-        ax4.plot(nu, radi)
+        ax4.plot(nu, radi, label=name_isoto + '$T$=' + str(T_) + 'K $P$=' + str(P_) + 'atm')
         # Add a legend
         ax4.legend(loc='upper right')
         # Label the axes
         ax4.set_xlabel(r'$\nu$ $cm^{-1}$')
         ax4.set_ylabel(r'Radiance')
         # Title
-        ax4.set_title('Radiance spectrum for ' + name_isoto + '$T$=' + str(T_) + 'K $P$=' + str(P_) + 'atm')
+        ax4.set_title('Radiance spectrum ')
 
+        # Redraw the plot
         canvas.draw()
 
-        return Data
+        return Data,ax1,ax2,ax3,ax4
     
     except ValueError:
         messagebox.showerror("Error", "Invalid input. Please enter numeric values.")
@@ -147,15 +125,36 @@ def Save_data():
         print(f"An error occurred saving the data")
 
 
+def clear_plot():
+    # Function to clear plots
+    ax1.clear()
+    ax2.clear()
+    ax3.clear()
+    ax4.clear()
+    # Redraw the plot
+    canvas.draw()
+
+
 # Create input fields
 # Create a frame for the introductory paragraph
 root = tk.Tk()
 intro_frame = ttk.Frame(root)
+root['bg'] = 'white'
 intro_frame.grid(row=0, column=0, columnspan=2, sticky="nsew")
 
 # Add a label with your introductory paragraph text
-intro_label = ttk.Label(intro_frame, text="Welcome to the Spectra Analyzer GUI!\nThis GUI allows you to obtain spectra data from HITRAN using HT (Hartmann-Tran) profile.\nDeveloped by Erick Gatica")
+intro_label = ttk.Label(intro_frame, text="Welcome to the Spectra Analyzer GUI!\nThis GUI allows you to obtain spectra data from HITRAN. \n Developed by Erick Gatica \n University of Colorado Boulder \n Department of Mechanical Engineering")
 intro_label.pack()
+
+image = Image.open(r"C:\Users\Erick\OneDrive - UCB-O365\Research\Codes\Hapi\Practising\laser_lab.jpg")
+# Resize the image if needed
+image = image.resize((250, 250))
+# Create a PhotoImage object from the image
+photo = ImageTk.PhotoImage(image)
+
+# Add a label for the image
+image_label = ttk.Label(intro_frame, image=photo)
+image_label.pack()
 
 # Frame for inputs
 input_frame = ttk.LabelFrame(root, text="Input Parameters")
@@ -211,9 +210,12 @@ compute_button = ttk.Button(input_frame, text="Compute and Plot", command=update
 compute_button.grid(row=8, column=0, columnspan=2)
 
 # Create a button to to save the data
-saveD_button = ttk.Button(input_frame, text="Save the data in a text file", command=Save_data)
+saveD_button = ttk.Button(input_frame, text="Save the last data in a text file", command=Save_data)
 saveD_button.grid(row=9, column=0, columnspan=2)
 
+# Button for clear the plots
+clear_button = ttk.Button(input_frame, text="Clear the plots", command=clear_plot)
+clear_button.grid(row=10, column=0, columnspan=2)
 
 #Create 
 
@@ -224,17 +226,17 @@ fig.subplots_adjust(hspace=0.5, wspace=0.5)  # Adjust vertical and horizontal sp
 # Create a Matplotlib canvas for embedding the figure in the Tkinter window
 canvas = FigureCanvasTkAgg(fig, master=root)
 canvas_widget = canvas.get_tk_widget()
-canvas_widget.grid(row=10, column=0, columnspan=2, sticky=tk.NSEW)
+canvas_widget.grid(row=11, column=0, columnspan=2, sticky=tk.NSEW)
 
 # Create a frame for the Matplotlib toolbar
 toolbar_frame = ttk.Frame(root)
-toolbar_frame.grid(row=11, column=0, columnspan=2, sticky="nsew")
+toolbar_frame.grid(row=12, column=0, columnspan=2, sticky="nsew")
 
 # Add a Matplotlib toolbar for zooming
 toolbar = NavigationToolbar2Tk(canvas, toolbar_frame)
 toolbar.update()
 toolbar.pack(side=tk.BOTTOM, fill=tk.X)
-canvas_widget.grid(row=12, column=0, columnspan=2, sticky=tk.NSEW)
+canvas_widget.grid(row=13, column=0, columnspan=2, sticky=tk.NSEW)
 
 # Configure grid row and column of plots weights to make them expand with the window
 root.grid_rowconfigure(9, weight=1)
