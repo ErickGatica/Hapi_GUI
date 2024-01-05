@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 #Getting data for H2O in the range of cm^-1
 
 # This is the function to get absorption coefficient, and absorpton, transmittance, and radiance spectrum
-def spectrum(P,T,length,numin,numax,molecule_id,isotopo_id,method_):
+def spectrum(P,T,length,numin,numax,molecule_id,isotopo_id,method_,wavestep):
 
     molecule=moleculeName(molecule_id); #Getting the name of the molecule from the id
     #if isotopo_id is None:
@@ -26,13 +26,13 @@ def spectrum(P,T,length,numin,numax,molecule_id,isotopo_id,method_):
     fetch(molecule,molecule_id,isotopo_id,numin,numax)
     # Lets go with the data
     if method_=="HT":
-        nu,coef=absorptionCoefficient_HT(SourceTables=molecule,Diluent={'air':1.0},Environment={'T':T,'p':P,'l':length})
+        nu,coef=absorptionCoefficient_HT(SourceTables=molecule,WavenumberStep=wavestep,Diluent={'air':1.0},Environment={'T':T,'p':P,'l':length})
     elif method_=="V":
-        nu,coef=absorptionCoefficient_Voigt(SourceTables=molecule,Diluent={'air':1.0},Environment={'T':T,'p':P,'l':length})
+        nu,coef=absorptionCoefficient_Voigt(SourceTables=molecule,WavenumberStep=wavestep,Diluent={'air':1.0},Environment={'T':T,'p':P,'l':length})
     elif method_=="L":
-        nu,coef=absorptionCoefficient_Lorentz(SourceTables=molecule,Diluent={'air':1.0},Environment={'T':T,'p':P,'l':length})
+        nu,coef=absorptionCoefficient_Lorentz(SourceTables=molecule,WavenumberStep=wavestep,Diluent={'air':1.0},Environment={'T':T,'p':P,'l':length})
     elif method_=="D":
-        nu,coef=absorptionCoefficient_Doppler(SourceTables=molecule,Diluent={'air':1.0},Environment={'T':T,'p':P,'l':length})
+        nu,coef=absorptionCoefficient_Doppler(SourceTables=molecule,WavenumberStep=wavestep,Diluent={'air':1.0},Environment={'T':T,'p':P,'l':length})
 
 #nu,coef=absorptionCoefficient_Gauss(SourceTables=molecule,Diluent={'air':1.0},Environment={'T':T,'p':P,'l':length})
 #-> absorptionCoefficient_HT

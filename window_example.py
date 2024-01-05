@@ -26,6 +26,7 @@ def update_plot():
         numin_ = float(numin.get())
         numax_ = float(numax.get())
         method_=str(method_var.get())
+        wavestep_ = float(wavestep.get())
 
 
         if method_ not in ["HT", "V", "L", "D"]:
@@ -33,7 +34,7 @@ def update_plot():
             return 0
 
         # Calling HITRAN functions and generating data
-        Data = spectrum(P_, T_, length_, numin_, numax_, molecule_id_, isotopo_id_,method_)
+        Data = spectrum(P_, T_, length_, numin_, numax_, molecule_id_, isotopo_id_,method_,wavestep_)
 
         #nu = 10**7/Data.nu   # conversion from cm^-1 of HITRAN to nm, CHECK
         nu=Data.nu
@@ -145,7 +146,10 @@ intro_frame.grid(row=0, column=0, columnspan=2, sticky="nsew")
 # Add a label with your introductory paragraph text
 intro_label = ttk.Label(intro_frame, text="Welcome to the Spectra Analyzer GUI!\nThis GUI allows you to obtain spectra data from HITRAN. \n Developed by Erick Gatica \n University of Colorado Boulder \n Department of Mechanical Engineering")
 intro_label.pack()
-
+# Add a second label with interesting link to the HITRAN database
+intro2_label = ttk.Label(intro_frame, text="For information of the molecule and isotopologue number, visit: \n https://hitran.org/docs/molec-meta/  &   https://hitran.org/docs/iso-meta/ ")
+intro2_label.pack()
+# Add a third label with an image
 image = Image.open(r"C:\Users\Erick\OneDrive - UCB-O365\Research\Codes\Hapi\Practising\laser_lab.jpg")
 # Resize the image if needed
 image = image.resize((250, 250))
@@ -195,27 +199,32 @@ numax_label.grid(row=6, column=0)
 numax = ttk.Entry(input_frame)
 numax.grid(row=6, column=1)
 
+wavestep_label = ttk.Label(input_frame, text="Wave number step [cm^-1]:")
+wavestep_label.grid(row=7, column=0)
+wavestep = ttk.Entry(input_frame)
+wavestep.grid(row=7, column=1)
+
 # Method of Compute (New variable)
 method_label = ttk.Label(input_frame, text="Method of Compute HT, Voigt, Lorentz or Doppler:")
-method_label.grid(row=7, column=0)
+method_label.grid(row=8, column=0)
 method_var = tk.StringVar()
 method_dropdown = ttk.Combobox(input_frame, textvariable=method_var, values=["HT", "V", "L","D"])  # Add more values as needed
-method_dropdown.grid(row=7, column=1)
+method_dropdown.grid(row=8, column=1)
 method_dropdown.set("HT")  # Set a default value
 
 # Next frame
 
 # Create a button to trigger the function and update the plot
 compute_button = ttk.Button(input_frame, text="Compute and Plot", command=update_plot)
-compute_button.grid(row=8, column=0, columnspan=2)
+compute_button.grid(row=9, column=0, columnspan=2)
 
 # Create a button to to save the data
 saveD_button = ttk.Button(input_frame, text="Save the last data in a text file", command=Save_data)
-saveD_button.grid(row=9, column=0, columnspan=2)
+saveD_button.grid(row=10, column=0, columnspan=2)
 
 # Button for clear the plots
 clear_button = ttk.Button(input_frame, text="Clear the plots", command=clear_plot)
-clear_button.grid(row=10, column=0, columnspan=2)
+clear_button.grid(row=11, column=0, columnspan=2)
 
 #Create 
 
@@ -226,24 +235,24 @@ fig.subplots_adjust(hspace=0.5, wspace=0.5)  # Adjust vertical and horizontal sp
 # Create a Matplotlib canvas for embedding the figure in the Tkinter window
 canvas = FigureCanvasTkAgg(fig, master=root)
 canvas_widget = canvas.get_tk_widget()
-canvas_widget.grid(row=11, column=0, columnspan=2, sticky=tk.NSEW)
+canvas_widget.grid(row=12, column=0, columnspan=2, sticky=tk.NSEW)
 
 # Create a frame for the Matplotlib toolbar
 toolbar_frame = ttk.Frame(root)
-toolbar_frame.grid(row=12, column=0, columnspan=2, sticky="nsew")
+toolbar_frame.grid(row=13, column=0, columnspan=2, sticky="nsew")
 
 # Add a Matplotlib toolbar for zooming
 toolbar = NavigationToolbar2Tk(canvas, toolbar_frame)
 toolbar.update()
 toolbar.pack(side=tk.BOTTOM, fill=tk.X)
-canvas_widget.grid(row=13, column=0, columnspan=2, sticky=tk.NSEW)
+canvas_widget.grid(row=14, column=0, columnspan=2, sticky=tk.NSEW)
 
 # Configure grid row and column of plots weights to make them expand with the window
-root.grid_rowconfigure(9, weight=1)
+root.grid_rowconfigure(14, weight=1)
 root.grid_columnconfigure(0, weight=1)
 
 # Configure grid row and column of zoombar weights to make them expand with the window
-root.grid_rowconfigure(11, weight=1)
+root.grid_rowconfigure(14, weight=1)
 root.grid_columnconfigure(0, weight=1)
 
 
