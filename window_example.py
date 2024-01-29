@@ -11,9 +11,9 @@ import numpy as np
 from Spectrums import spectrum
 from PIL import Image, ImageTk
 
-#method = tk.StringVar()
-#method.set("HT")  # Set a default value
-
+# Defining constant values
+R_gas=float(8.314)
+Avog=float(6.022E+23) #mol/elemental entity
 # Function to update the plot
 def update_plot():
     #global axis
@@ -23,21 +23,25 @@ def update_plot():
         length_ = float(length.get())
         molecule_id_ = int(molecule_id.get())
         isotopo_id_ = int(isotopo_id.get())
-        numin_ = float(numin.get())
-        numax_ = float(numax.get())
+        numin_ = 10000000/float(numin.get())
+        numax_ = 10000000/float(numax.get())
         method_=str(method_var.get())
         wavestep_ = float(wavestep.get())
-
+        molar_=float(molar.get())
 
         if method_ not in ["HT", "V", "L", "D"]:
             messagebox.showerror("Error", "Invalid method. Please select a valid method.")
             return 0
 
         # Calling HITRAN functions and generating data
-        Data = spectrum(P_, T_, length_, numin_, numax_, molecule_id_, isotopo_id_,method_,wavestep_)
+        Data = spectrum(P_, T_, length_, numin_, numax_, molecule_id_, isotopo_id_,method_,wavestep_,molar_)
+        # Extracting the data
+        nu = 10**7/Data.nu   # conversion from cm^-1 of HITRAN to nm, CHECK
+        #Computing the number of molecules
+        total_mol=P_*101325/(R_gas*T_) # Total mol per volume m3
+        mol_specie=total_mol*molar_
+        Absorption=np.multiply(Data.coef,mol_specie/(100**3)*length_*Avog) # 100^3 is for converting m3 to cm3
 
-        #nu = 10**7/Data.nu   # conversion from cm^-1 of HITRAN to nm, CHECK
-        nu=Data.nu
         coef = Data.coef
         absorp = Data.absorp
         trans = Data.trans
@@ -47,38 +51,38 @@ def update_plot():
         # Clear previous plots, now i defined a button to do it
 
         # Plotting
-        ax1.plot(nu, coef, label=name_isoto + ' $T$=' + str(T_) + 'K $P$=' + str(P_) + 'atm')
+        ax1.plot(nu, Absorption, label=name_isoto + ' $T$=' + str(T_) + 'K $P$=' + str(P_) + 'atm'+' $MF$='+str(molar_))
         # Add a legend
         ax1.legend(loc='upper right', bbox_to_anchor=(1.0, 1.0))
         # Label the axes
-        ax1.set_xlabel(r'$\nu$ $cm^{-1}$')
+        ax1.set_xlabel(r'$\nu$ $nm$')
         ax1.set_ylabel(r'Coefficient $cm^2/molecule$')
         # Title
-        ax1.set_title('Absorption coefficient')
+        ax1.set_title('Absorption')
 
-        ax2.plot(nu, absorp, label=name_isoto + ' $T$=' + str(T_) + 'K $P$=' + str(P_) + 'atm')
+        ax2.plot(nu, absorp , label=name_isoto + ' $T$=' + str(T_) + 'K $P$=' + str(P_) + 'atm'+' $MF$='+str(molar_))
         # Add a legend
         ax2.legend(loc='upper right')
         # Label the axes
-        ax2.set_xlabel(r'$\nu$ $cm^{-1}$')
-        ax2.set_ylabel(r'Absorbance')
+        ax2.set_xlabel(r'$\nu$ $nm$')
+        ax2.set_ylabel(r'Absorption')
         # Title
         ax2.set_title('Absorption spectrum')
 
-        ax3.plot(nu, trans, label=name_isoto + ' $T$=' + str(T_) + 'K $P$=' + str(P_) + 'atm')
+        ax3.plot(nu, trans, label=name_isoto + ' $T$=' + str(T_) + 'K $P$=' + str(P_) + 'atm'+' $MF$='+str(molar_))
         # Add a legend
         ax3.legend(loc='upper right')
         # Label the axes
-        ax3.set_xlabel(r'$\nu$ $cm^{-1}$')
+        ax3.set_xlabel(r'$\nu$ $nm$')
         ax3.set_ylabel(r'Transmittance')
         # Title
         ax3.set_title('Transmittance spectrum' )
 
-        ax4.plot(nu, radi, label=name_isoto + '$T$=' + str(T_) + 'K $P$=' + str(P_) + 'atm')
+        ax4.plot(nu, radi, label=name_isoto + '$T$=' + str(T_) + 'K $P$=' + str(P_) + 'atm'+' $MF$='+str(molar_))
         # Add a legend
         ax4.legend(loc='upper right')
         # Label the axes
-        ax4.set_xlabel(r'$\nu$ $cm^{-1}$')
+        ax4.set_xlabel(r'$\nu$ $nm$')
         ax4.set_ylabel(r'Radiance')
         # Title
         ax4.set_title('Radiance spectrum ')
@@ -150,7 +154,7 @@ intro_label.pack()
 intro2_label = ttk.Label(intro_frame, text="For information of the molecule and isotopologue number, visit: \n https://hitran.org/docs/molec-meta/  &   https://hitran.org/docs/iso-meta/ ")
 intro2_label.pack()
 # Add a third label with an image
-image = Image.open(r"C:\Users\Erick\OneDrive - UCB-O365\Research\Codes\Hapi\Practising\laser_lab.jpg")
+image = Image.open(r"C:\Users\Usuario\OneDrive - UCB-O365\Research\Codes\Hapi\Practising\laser_lab.jpg")
 # Resize the image if needed
 image = image.resize((250, 250))
 # Create a PhotoImage object from the image
@@ -163,68 +167,72 @@ image_label.pack()
 # Frame for inputs
 input_frame = ttk.LabelFrame(root, text="Input Parameters")
 input_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nw")
-
+# Temperature
 T_label = ttk.Label(input_frame, text="Temperature [K]:")
 T_label.grid(row=0, column=0)
 T = ttk.Entry(input_frame)
 T.grid(row=0, column=1)
-
+# Pressure
 P_label = ttk.Label(input_frame, text="Pressure [atm]:")
 P_label.grid(row=1, column=0)
 P = ttk.Entry(input_frame)
 P.grid(row=1, column=1)
-
+# Path length
 length_label = ttk.Label(input_frame, text="Path Length [cm]:")
 length_label.grid(row=2, column=0)
 length = ttk.Entry(input_frame)
 length.grid(row=2, column=1)
-
+# Molecule ID
 molecule_id_label = ttk.Label(input_frame, text="Molecule ID:")
 molecule_id_label.grid(row=3, column=0)
 molecule_id = ttk.Entry(input_frame)
 molecule_id.grid(row=3, column=1)
-
+# Isotopologue ID
 isotopo_id_label = ttk.Label(input_frame, text="Isotopologue ID:")
 isotopo_id_label.grid(row=4, column=0)
 isotopo_id = ttk.Entry(input_frame)
 isotopo_id.grid(row=4, column=1)
-
-numin_label = ttk.Label(input_frame, text="Min Wavelength [cm^-1]:")
+# Max Wavelength [nm], min v[cm-1]
+numin_label = ttk.Label(input_frame, text="Max Wavelength [nm]:")
 numin_label.grid(row=5, column=0)
 numin = ttk.Entry(input_frame)
 numin.grid(row=5, column=1)
-
-numax_label = ttk.Label(input_frame, text="Max Wavelength [cm^-1]:")
+# Min Wavelength [nm], max v[cm-1]
+numax_label = ttk.Label(input_frame, text="Min Wavelength [nm]:")
 numax_label.grid(row=6, column=0)
 numax = ttk.Entry(input_frame)
 numax.grid(row=6, column=1)
-
+# Wavestep [cm-1]
 wavestep_label = ttk.Label(input_frame, text="Wave number step [cm^-1]:")
 wavestep_label.grid(row=7, column=0)
 wavestep = ttk.Entry(input_frame)
 wavestep.grid(row=7, column=1)
-
+# Molar fraction
+molar_label=ttk.Label(input_frame,text="Molar fraction in air:")
+molar_label.grid(row=8, column=0)
+molar=ttk.Entry(input_frame)
+molar.grid(row=8, column=1)
 # Method of Compute (New variable)
 method_label = ttk.Label(input_frame, text="Method of Compute HT, Voigt, Lorentz or Doppler:")
-method_label.grid(row=8, column=0)
+method_label.grid(row=9, column=0)
 method_var = tk.StringVar()
 method_dropdown = ttk.Combobox(input_frame, textvariable=method_var, values=["HT", "V", "L","D"])  # Add more values as needed
-method_dropdown.grid(row=8, column=1)
+method_dropdown.grid(row=9, column=1)
 method_dropdown.set("HT")  # Set a default value
 
 # Next frame
 
 # Create a button to trigger the function and update the plot
 compute_button = ttk.Button(input_frame, text="Compute and Plot", command=update_plot)
-compute_button.grid(row=9, column=0, columnspan=2)
+compute_button.grid(row=10, column=0, columnspan=2)
 
 # Create a button to to save the data
 saveD_button = ttk.Button(input_frame, text="Save the last data in a text file", command=Save_data)
-saveD_button.grid(row=10, column=0, columnspan=2)
+saveD_button.grid(row=11, column=0, columnspan=2)
 
 # Button for clear the plots
 clear_button = ttk.Button(input_frame, text="Clear the plots", command=clear_plot)
-clear_button.grid(row=11, column=0, columnspan=2)
+clear_button.grid(row=12, column=0, columnspan=2)
 
 #Create 
 
@@ -235,24 +243,24 @@ fig.subplots_adjust(hspace=0.5, wspace=0.5)  # Adjust vertical and horizontal sp
 # Create a Matplotlib canvas for embedding the figure in the Tkinter window
 canvas = FigureCanvasTkAgg(fig, master=root)
 canvas_widget = canvas.get_tk_widget()
-canvas_widget.grid(row=12, column=0, columnspan=2, sticky=tk.NSEW)
+canvas_widget.grid(row=13, column=0, columnspan=2, sticky=tk.NSEW)
 
 # Create a frame for the Matplotlib toolbar
 toolbar_frame = ttk.Frame(root)
-toolbar_frame.grid(row=13, column=0, columnspan=2, sticky="nsew")
+toolbar_frame.grid(row=14, column=0, columnspan=2, sticky="nsew")
 
 # Add a Matplotlib toolbar for zooming
 toolbar = NavigationToolbar2Tk(canvas, toolbar_frame)
 toolbar.update()
 toolbar.pack(side=tk.BOTTOM, fill=tk.X)
-canvas_widget.grid(row=14, column=0, columnspan=2, sticky=tk.NSEW)
+canvas_widget.grid(row=15, column=0, columnspan=2, sticky=tk.NSEW)
 
 # Configure grid row and column of plots weights to make them expand with the window
-root.grid_rowconfigure(14, weight=1)
+root.grid_rowconfigure(15, weight=1)
 root.grid_columnconfigure(0, weight=1)
 
 # Configure grid row and column of zoombar weights to make them expand with the window
-root.grid_rowconfigure(14, weight=1)
+root.grid_rowconfigure(15, weight=1)
 root.grid_columnconfigure(0, weight=1)
 
 
