@@ -42,11 +42,11 @@ def spectrum(P,T,length,numin,numax,molecule_id,isotopo_id,method_,wavestep,mola
 
     #Getting the spectrums
     # Lets go with absorption Spectrum
-    nu,absorp=absorptionSpectrum(nu,coef);
+    nu,absorp=absorptionSpectrum(nu,coef)
     # Lets go with transmittance Spectrum
-    nu,trans=transmittanceSpectrum(nu,coef);
+    nu,trans=transmittanceSpectrum(nu,coef)
     # Lets go with radiance Spectrum
-    nu,radi = radianceSpectrum(nu,coef);
+    nu,radi = radianceSpectrum(nu,coef)
 
 
 

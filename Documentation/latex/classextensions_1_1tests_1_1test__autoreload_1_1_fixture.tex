@@ -1,0 +1,80 @@
+\doxysection{extensions.\+tests.\+test\+\_\+autoreload.\+Fixture Class Reference}
+\hypertarget{classextensions_1_1tests_1_1test__autoreload_1_1_fixture}{}\label{classextensions_1_1tests_1_1test__autoreload_1_1_fixture}\index{extensions.tests.test\_autoreload.Fixture@{extensions.tests.test\_autoreload.Fixture}}
+
+
+Inheritance diagram for extensions.\+tests.\+test\+\_\+autoreload.\+Fixture\+:
+% FIG 0
+
+
+Collaboration diagram for extensions.\+tests.\+test\+\_\+autoreload.\+Fixture\+:
+% FIG 1
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classextensions_1_1tests_1_1test__autoreload_1_1_fixture_a7784d8cd7b133d4cdf9545fc0c66b9ba}\label{classextensions_1_1tests_1_1test__autoreload_1_1_fixture_a7784d8cd7b133d4cdf9545fc0c66b9ba} 
+{\bfseries set\+Up} (self)
+\item 
+\Hypertarget{classextensions_1_1tests_1_1test__autoreload_1_1_fixture_aeabb8a0214f132724b84fc348996aa8c}\label{classextensions_1_1tests_1_1test__autoreload_1_1_fixture_aeabb8a0214f132724b84fc348996aa8c} 
+{\bfseries tear\+Down} (self)
+\item 
+\Hypertarget{classextensions_1_1tests_1_1test__autoreload_1_1_fixture_a0a1463dc9773adf26b88ec8e4bcb2da1}\label{classextensions_1_1tests_1_1test__autoreload_1_1_fixture_a0a1463dc9773adf26b88ec8e4bcb2da1} 
+{\bfseries get\+\_\+module} (self)
+\item 
+\mbox{\hyperlink{classextensions_1_1tests_1_1test__autoreload_1_1_fixture_ab7c443484e7a1d088baaef68afb79cd8}{write\+\_\+file}} (self, filename, content)
+\item 
+\Hypertarget{classextensions_1_1tests_1_1test__autoreload_1_1_fixture_a2d8b86fa253ef9ced51488efc789255b}\label{classextensions_1_1tests_1_1test__autoreload_1_1_fixture_a2d8b86fa253ef9ced51488efc789255b} 
+{\bfseries new\+\_\+module} (self, code)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classextensions_1_1tests_1_1test__autoreload_1_1_fixture_ab9345925cde3911f785995e38f338da6}\label{classextensions_1_1tests_1_1test__autoreload_1_1_fixture_ab9345925cde3911f785995e38f338da6} 
+{\bfseries shell}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classextensions_1_1tests_1_1test__autoreload_1_1_fixture_a8527c64593421c826f3f05e4c891eaab}\label{classextensions_1_1tests_1_1test__autoreload_1_1_fixture_a8527c64593421c826f3f05e4c891eaab} 
+{\bfseries test\+\_\+dir} = None
+\item 
+\Hypertarget{classextensions_1_1tests_1_1test__autoreload_1_1_fixture_a2a8cbcbb5007d06abd9afe53d58c096e}\label{classextensions_1_1tests_1_1test__autoreload_1_1_fixture_a2a8cbcbb5007d06abd9afe53d58c096e} 
+{\bfseries old\+\_\+sys\+\_\+path} = None
+\item 
+\Hypertarget{classextensions_1_1tests_1_1test__autoreload_1_1_fixture_aca65ff2c0dbbbdd205d8378190dffb21}\label{classextensions_1_1tests_1_1test__autoreload_1_1_fixture_aca65ff2c0dbbbdd205d8378190dffb21} 
+str {\bfseries filename\+\_\+chars} = "{}abcdefghijklmopqrstuvwxyz0123456789"{}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}Fixture for creating test module files\end{DoxyVerb}
+ 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classextensions_1_1tests_1_1test__autoreload_1_1_fixture_ab7c443484e7a1d088baaef68afb79cd8}\label{classextensions_1_1tests_1_1test__autoreload_1_1_fixture_ab7c443484e7a1d088baaef68afb79cd8} 
+\index{extensions.tests.test\_autoreload.Fixture@{extensions.tests.test\_autoreload.Fixture}!write\_file@{write\_file}}
+\index{write\_file@{write\_file}!extensions.tests.test\_autoreload.Fixture@{extensions.tests.test\_autoreload.Fixture}}
+\doxysubsubsection{\texorpdfstring{write\_file()}{write\_file()}}
+{\footnotesize\ttfamily extensions.\+tests.\+test\+\_\+autoreload.\+Fixture.\+write\+\_\+file (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{filename,  }\item[{}]{content }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Write a file, and force a timestamp difference of at least one second
+
+Notes
+-----
+Python's .pyc files record the timestamp of their compilation
+with a time resolution of one second.
+
+Therefore, we need to force a timestamp difference between .py
+and .pyc, without having the .py file be timestamped in the
+future, and without changing the timestamp of the .pyc file
+(because that is stored in the file).  The only reliable way
+to achieve this seems to be to sleep.
+\end{DoxyVerb}
+ Here is the call graph for this function\+:
+% FIG 2
+Here is the caller graph for this function\+:
+% FIG 3
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Erick/\+One\+Drive -\/ UCB-\/\+O365/\+Research/\+Codes/\+Hapi/\+Practising/dist/window\+\_\+example/\+\_\+internal/\+IPython/extensions/tests/test\+\_\+autoreload.\+py\end{DoxyCompactItemize}

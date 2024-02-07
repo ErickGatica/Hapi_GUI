@@ -1,0 +1,135 @@
+\doxysection{extensions.\+autoreload.\+Autoreload\+Magics Class Reference}
+\hypertarget{classextensions_1_1autoreload_1_1_autoreload_magics}{}\label{classextensions_1_1autoreload_1_1_autoreload_magics}\index{extensions.autoreload.AutoreloadMagics@{extensions.autoreload.AutoreloadMagics}}
+
+
+Inheritance diagram for extensions.\+autoreload.\+Autoreload\+Magics\+:
+% FIG 0
+
+
+Collaboration diagram for extensions.\+autoreload.\+Autoreload\+Magics\+:
+% FIG 1
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classextensions_1_1autoreload_1_1_autoreload_magics_a2dfffdf7d37b05bf7eb61b833d1dca8d}\label{classextensions_1_1autoreload_1_1_autoreload_magics_a2dfffdf7d37b05bf7eb61b833d1dca8d} 
+{\bfseries \+\_\+\+\_\+init\+\_\+\+\_\+} (self, \texorpdfstring{$\ast$}{*}a, \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}kw)
+\item 
+\mbox{\hyperlink{classextensions_1_1autoreload_1_1_autoreload_magics_aa7ea045af24cf5b33a0f7a60521a060c}{autoreload}} (self, line="{}"{})
+\item 
+\mbox{\hyperlink{classextensions_1_1autoreload_1_1_autoreload_magics_ae2823688c740806e912c7437410e4c1a}{aimport}} (self, parameter\+\_\+s="{}"{}, stream=None)
+\item 
+\Hypertarget{classextensions_1_1autoreload_1_1_autoreload_magics_a335ed026b303c8b00e5803f19190a08a}\label{classextensions_1_1autoreload_1_1_autoreload_magics_a335ed026b303c8b00e5803f19190a08a} 
+{\bfseries pre\+\_\+run\+\_\+cell} (self)
+\item 
+\mbox{\hyperlink{classextensions_1_1autoreload_1_1_autoreload_magics_ac3b8dd2c578b5e7e63ffd0cda29b8433}{post\+\_\+execute\+\_\+hook}} (self)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classextensions_1_1autoreload_1_1_autoreload_magics_a54e743646e85c0e139fcada7b9850434}\label{classextensions_1_1autoreload_1_1_autoreload_magics_a54e743646e85c0e139fcada7b9850434} 
+{\bfseries loaded\+\_\+modules}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classextensions_1_1autoreload_1_1_autoreload_magics_a7b6c5f791c318a4ef3729824abacad29}\label{classextensions_1_1autoreload_1_1_autoreload_magics_a7b6c5f791c318a4ef3729824abacad29} 
+{\bfseries \+\_\+reloader}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classextensions_1_1autoreload_1_1_autoreload_magics_ae2823688c740806e912c7437410e4c1a}\label{classextensions_1_1autoreload_1_1_autoreload_magics_ae2823688c740806e912c7437410e4c1a} 
+\index{extensions.autoreload.AutoreloadMagics@{extensions.autoreload.AutoreloadMagics}!aimport@{aimport}}
+\index{aimport@{aimport}!extensions.autoreload.AutoreloadMagics@{extensions.autoreload.AutoreloadMagics}}
+\doxysubsubsection{\texorpdfstring{aimport()}{aimport()}}
+{\footnotesize\ttfamily extensions.\+autoreload.\+Autoreload\+Magics.\+aimport (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{parameter\+\_\+s = {\ttfamily "{}"{}},  }\item[{}]{stream = {\ttfamily None} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}%aimport => Import modules for automatic reloading.
+
+%aimport
+List modules to automatically import and not to import.
+
+%aimport foo
+Import module 'foo' and mark it to be autoreloaded for %autoreload explicit
+
+%aimport foo, bar
+Import modules 'foo', 'bar' and mark them to be autoreloaded for %autoreload explicit
+
+%aimport -foo, bar
+Mark module 'foo' to not be autoreloaded for %autoreload explicit, all, or complete, and 'bar'
+to be autoreloaded for mode explicit.
+\end{DoxyVerb}
+ \Hypertarget{classextensions_1_1autoreload_1_1_autoreload_magics_aa7ea045af24cf5b33a0f7a60521a060c}\label{classextensions_1_1autoreload_1_1_autoreload_magics_aa7ea045af24cf5b33a0f7a60521a060c} 
+\index{extensions.autoreload.AutoreloadMagics@{extensions.autoreload.AutoreloadMagics}!autoreload@{autoreload}}
+\index{autoreload@{autoreload}!extensions.autoreload.AutoreloadMagics@{extensions.autoreload.AutoreloadMagics}}
+\doxysubsubsection{\texorpdfstring{autoreload()}{autoreload()}}
+{\footnotesize\ttfamily extensions.\+autoreload.\+Autoreload\+Magics.\+autoreload (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{line = {\ttfamily "{}"{}} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}%autoreload => Reload modules automatically
+
+    %autoreload or %autoreload now
+    Reload all modules (except those excluded by %aimport) automatically
+    now.
+
+    %autoreload 0 or %autoreload off
+    Disable automatic reloading.
+
+    %autoreload 1 or %autoreload explicit
+    Reload only modules imported with %aimport every time before executing
+    the Python code typed.
+
+    %autoreload 2 or %autoreload all
+    Reload all modules (except those excluded by %aimport) every time
+    before executing the Python code typed.
+
+    %autoreload 3 or %autoreload complete
+    Same as 2/all, but also but also adds any new objects in the module. See
+    unit test at IPython/extensions/tests/test_autoreload.py::test_autoload_newly_added_objects
+
+    The optional arguments --print and --log control display of autoreload activity. The default
+    is to act silently; --print (or -p) will print out the names of modules that are being
+    reloaded, and --log (or -l) outputs them to the log at INFO level.
+
+    The optional argument --hide-errors hides any errors that can happen when trying to
+    reload code.
+
+    Reloading Python modules in a reliable way is in general
+    difficult, and unexpected things may occur. %autoreload tries to
+    work around common pitfalls by replacing function code objects and
+    parts of classes previously in the module with new versions. This
+    makes the following things to work:
+
+    - Functions and classes imported via 'from xxx import foo' are upgraded
+      to new versions when 'xxx' is reloaded.
+
+    - Methods and properties of classes are upgraded on reload, so that
+      calling 'c.foo()' on an object 'c' created before the reload causes
+      the new code for 'foo' to be executed.
+
+    Some of the known remaining caveats are:
+
+    - Replacing code objects does not always succeed: changing a @property
+      in a class to an ordinary method or a method to a member variable
+      can cause problems (but in old objects only).
+
+    - Functions that are removed (eg. via monkey-patching) from a module
+      before it is reloaded are not upgraded.
+
+    - C extension modules cannot be reloaded, and so cannot be
+      autoreloaded.\end{DoxyVerb}
+ Here is the call graph for this function\+:
+% FIG 2
+Here is the caller graph for this function\+:
+% FIG 3
+\Hypertarget{classextensions_1_1autoreload_1_1_autoreload_magics_ac3b8dd2c578b5e7e63ffd0cda29b8433}\label{classextensions_1_1autoreload_1_1_autoreload_magics_ac3b8dd2c578b5e7e63ffd0cda29b8433} 
+\index{extensions.autoreload.AutoreloadMagics@{extensions.autoreload.AutoreloadMagics}!post\_execute\_hook@{post\_execute\_hook}}
+\index{post\_execute\_hook@{post\_execute\_hook}!extensions.autoreload.AutoreloadMagics@{extensions.autoreload.AutoreloadMagics}}
+\doxysubsubsection{\texorpdfstring{post\_execute\_hook()}{post\_execute\_hook()}}
+{\footnotesize\ttfamily extensions.\+autoreload.\+Autoreload\+Magics.\+post\+\_\+execute\+\_\+hook (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Cache the modification times of any modules imported in this execution\end{DoxyVerb}
+ 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Erick/\+One\+Drive -\/ UCB-\/\+O365/\+Research/\+Codes/\+Hapi/\+Practising/dist/window\+\_\+example/\+\_\+internal/\+IPython/extensions/autoreload.\+py\end{DoxyCompactItemize}

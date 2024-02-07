@@ -56,7 +56,7 @@ def update_plot():
         ax1.legend(loc='upper right', bbox_to_anchor=(1.0, 1.0))
         # Label the axes
         ax1.set_xlabel(r'$\nu$ $nm$')
-        ax1.set_ylabel(r'Coefficient $cm^2/molecule$')
+        ax1.set_ylabel(r'Absorption')
         # Title
         ax1.set_title('Absorption')
 
@@ -65,7 +65,7 @@ def update_plot():
         ax2.legend(loc='upper right')
         # Label the axes
         ax2.set_xlabel(r'$\nu$ $nm$')
-        ax2.set_ylabel(r'Absorption')
+        ax2.set_ylabel(r'Absorption spectrum')
         # Title
         ax2.set_title('Absorption spectrum')
 
@@ -154,7 +154,7 @@ intro_label.pack()
 intro2_label = ttk.Label(intro_frame, text="For information of the molecule and isotopologue number, visit: \n https://hitran.org/docs/molec-meta/  &   https://hitran.org/docs/iso-meta/ ")
 intro2_label.pack()
 # Add a third label with an image
-image = Image.open(r"C:\Users\Usuario\OneDrive - UCB-O365\Research\Codes\Hapi\Practising\laser_lab.jpg")
+image = Image.open(r"C:\Users\Erick\OneDrive - UCB-O365\Research\Codes\Hapi\Practising\laser_lab.jpg")
 # Resize the image if needed
 image = image.resize((250, 250))
 # Create a PhotoImage object from the image
