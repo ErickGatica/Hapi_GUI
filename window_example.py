@@ -11,6 +11,21 @@ import numpy as np
 from Spectrums import spectrum
 from PIL import Image, ImageTk
 
+# Defining dictionary with the ID of the molecules
+molecule_id_dict = {
+    "H2O": 1,
+    "CO2": 2,
+    "CO": 5,
+    "N2": 22,
+    "O2": 7,
+    "CH4": 6,
+    "C2H6": 27,
+    "H2": 45,
+    "NO":8,
+    "NO2":10
+}
+
+
 # Defining constant values
 R_gas=float(8.314)
 Avog=float(6.022E+23) #mol/elemental entity
@@ -21,7 +36,8 @@ def update_plot():
         T_ = float(T.get())
         P_ = float(P.get())
         length_ = float(length.get())
-        molecule_id_ = int(molecule_id.get())
+        molecule_idtext = molecule_id_var.get()
+        molecule_id_ = molecule_id_dict[molecule_idtext]
         isotopo_id_ = int(isotopo_id.get())
         numin_ = 10000000/float(numin.get())
         numax_ = 10000000/float(numax.get())
@@ -183,10 +199,13 @@ length_label.grid(row=2, column=0)
 length = ttk.Entry(input_frame)
 length.grid(row=2, column=1)
 # Molecule ID
-molecule_id_label = ttk.Label(input_frame, text="Molecule ID:")
+# Molecule of interest multipe choice, considering dictionary of combustion products
+molecule_id_label = ttk.Label(input_frame, text="Molecule of interest:")
 molecule_id_label.grid(row=3, column=0)
-molecule_id = ttk.Entry(input_frame)
-molecule_id.grid(row=3, column=1)
+molecule_id_var = tk.StringVar()
+molecule_id_dropdown = ttk.Combobox(input_frame, textvariable=molecule_id_var, values=["H2O", "CO2", "CO", "N2", "O2","CH4","H2","NO","NO2"]) 
+molecule_id_dropdown.grid(row=3, column=1)
+molecule_id_dropdown.set("H2O")  # Set a default value
 # Isotopologue ID
 isotopo_id_label = ttk.Label(input_frame, text="Isotopologue ID:")
 isotopo_id_label.grid(row=4, column=0)
