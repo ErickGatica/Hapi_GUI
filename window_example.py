@@ -53,6 +53,9 @@ def update_plot():
         Data = spectrum(P_, T_, length_, numin_, numax_, molecule_id_, isotopo_id_,method_,wavestep_,molar_)
         # Extracting the data
         nu = 10**7/Data.nu   # conversion from cm^-1 of HITRAN to nm, CHECK
+        print(nu)
+        nu=np.flip(nu) # Inverting the array
+        print(nu)
         #Computing the number of molecules
         total_mol=P_*101325/(R_gas*T_) # Total mol per volume m3
         mol_specie=total_mol*molar_
@@ -170,7 +173,7 @@ intro_label.pack()
 intro2_label = ttk.Label(intro_frame, text="For information of the molecule and isotopologue number, visit: \n https://hitran.org/docs/molec-meta/  &   https://hitran.org/docs/iso-meta/ ")
 intro2_label.pack()
 # Add a third label with an image
-image = Image.open(r"C:\Users\Erick\OneDrive - UCB-O365\Research\Codes\Hapi\Practising\laser_lab.jpg")
+image = Image.open(r"C:\Users\Usuario\OneDrive - UCB-O365\Research\Codes\Hapi\Practising\laser_lab.jpg")
 # Resize the image if needed
 image = image.resize((250, 250))
 # Create a PhotoImage object from the image
@@ -212,13 +215,13 @@ isotopo_id_label.grid(row=4, column=0)
 isotopo_id = ttk.Entry(input_frame)
 isotopo_id.grid(row=4, column=1)
 # Max Wavelength [nm], min v[cm-1]
-numin_label = ttk.Label(input_frame, text="Max Wavelength [nm]:")
+numin_label = ttk.Label(input_frame, text="Max Wavelength [nm]:") # which is minimum wave number in cm-1
 numin_label.grid(row=5, column=0)
 numin = ttk.Entry(input_frame)
 numin.grid(row=5, column=1)
 # Min Wavelength [nm], max v[cm-1]
-numax_label = ttk.Label(input_frame, text="Min Wavelength [nm]:")
-numax_label.grid(row=6, column=0)
+numax_label = ttk.Label(input_frame, text="Min Wavelength [nm]:") # which is maximum wave number in cm-1
+numax_label.grid(row=6, column=0) 
 numax = ttk.Entry(input_frame)
 numax.grid(row=6, column=1)
 # Wavestep [cm-1]
