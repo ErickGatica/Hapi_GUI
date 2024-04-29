@@ -7,6 +7,8 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
 import numpy as np
 
+import os
+
 # Function to compute the result (replace with your own function)
 from Spectrums import spectrum
 from PIL import Image, ImageTk
@@ -172,8 +174,12 @@ intro_label.pack()
 # Add a second label with interesting link to the HITRAN database
 intro2_label = ttk.Label(intro_frame, text="For information of the molecule and isotopologue number, visit: \n https://hitran.org/docs/molec-meta/  &   https://hitran.org/docs/iso-meta/ ")
 intro2_label.pack()
-# Add a third label with an image
-image = Image.open(r"C:\Users\Usuario\OneDrive - UCB-O365\Research\Codes\Hapi\Practising\laser_lab.jpg")
+# Get the current working directory
+current_dir = os.getcwd()
+# Specify the relative path to the image file
+image_path = os.path.join(current_dir, "laser_lab.jpg")
+# Open the image
+image = Image.open(image_path)
 # Resize the image if needed
 image = image.resize((250, 250))
 # Create a PhotoImage object from the image
